@@ -2,28 +2,59 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>NAME</title>
+	<title>Smart House</title>
 	<link rel="stylesheet" type="text/css" href="css/all.css">
-	<script src="//http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-	<script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
-	<!-- <script src="js/.js" type="text/javascript"></script> -->
-	<script src="js/main.js" type="text/javascript"></script>
 </head>
 <body>
 	<div class="header">
 		<div class="container">
-			
+			<h1>The smart house</h1>
+		</div>
+		<div class="container">
+			<form action="">
+				<p>
+					<select name="selectItem" id="selectItem">
+						<option selected="selected">Select Item</option>
+						<option value="lamp">lamp</option>
+						<option value="tv">TV</option>
+						<option value="ElectricStove">Electric Stove</option>
+					</select>
+				</p>
+				<p><input id="buttonAdd" type="button" value="Add"></p>
+				<p><input id="buttonData" type="button" value="buttonData"></p>
+			</form>
 		</div>
 	</div>
 	<div class="main">
 		<div class="container">
-			
+			<div id="counter">
+				<p>Counter of energy</p>
+				<p>Consumer(s) of energy</p>
+				<p>0<span>Wt</span></p>
+			</div>
 		</div>
-	</div>
-	<div class="footer">
 		<div class="container">
-			
+			<div data-id="" id="lamp">
+				<p>Lamp <img src="image/lamp.svg" alt="lamp"></p>
+				<p class="statusOff">Status <span>OFF</span></p>
+			</div>
+		</div>
+		<div class="container">
+			<div data-id="" id="tv">
+				<p>Tv <img src="image/tv.svg" alt="tv"></p>
+				<p class="statusOff">Status <span>OFF</span></p>
+			</div>
+		</div>
+		<div class="container">
+			<div data-id="" id="electricStove">
+				<p>Electric Stove <img src="image/stove.svg" alt="stove"></p>
+				<p class="statusOff">Status <span>OFF</span></p>
+			</div>
 		</div>
 	</div>
+	<script src="js/view.js" type="text/javascript"></script>
+	<script src="js/model.js" type="text/javascript"></script>
+	<script src="js/constructor.js" type="text/javascript"></script>
+	<!-- <script src="js/.js" type="text/javascript"></script> -->
 </body>
 </html>
