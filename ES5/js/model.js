@@ -22,7 +22,7 @@ Model.prototype.add = function(value){
 	}else if(value === "ElectricStove"){
 		this.data.push(new ElectricStove(this.that));
 	}else{
-		console.log("ERROR")
+		console.log("ERROR The wrong value has come in add function");
 	}
 	//console.log(this.data);
 };
@@ -44,4 +44,22 @@ function ElectricStove(that){
 
 Model.prototype.createId = function(that){
 	return ++that.globalId;
+};
+
+Model.prototype.changeStatus = function(id){
+	for (var i = this.data.length - 1; i >= 0; i--) {
+		if(this.data[i].id === parseInt(id)){
+			if(this.data[i].state === true){
+				this.data[i].state = false;
+				//console.log(this.data[0].id)
+				this.data[0].consumer--;
+				this.data[0].power--;
+			}else{
+				this.data[i].state = true;
+				this.data[0].consumer++;
+				this.data[0].power++;
+			};
+
+		};
+	};
 };
