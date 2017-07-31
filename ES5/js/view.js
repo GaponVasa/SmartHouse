@@ -99,6 +99,7 @@ View.prototype.changeCounter = function(){
 	var powerElement = this.counter.querySelector(".power");
 	console.log(consumerElement.firstElementChild.textContent);
 	console.log(powerElement.firstElementChild.textContent);
+	
 	//consumerElement.firstElementChild.textContent = 
 }
 /////////////////////////////////////////////////////////////////////
