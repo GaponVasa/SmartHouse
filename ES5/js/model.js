@@ -11,8 +11,15 @@ Model.prototype.getData = function(){
 };
 
 Model.prototype.remove = function(value){
-
-}
+	var arr = this.data;
+	var length = arr.length;
+	for (var i = length - 1; i >= 0; i--) {
+		if(parseInt(arr[i].id) === parseInt(value)){
+			arr.splice(i, 1);
+			break;
+		};
+	};
+};
 
 Model.prototype.add = function(value){
 	if(value === "lamp"){
@@ -24,42 +31,75 @@ Model.prototype.add = function(value){
 	}else{
 		console.log("ERROR The wrong value has come in add function");
 	}
-	//console.log(this.data);
 };
 
 function Lamp(that){
 	this.id = Model.prototype.createId(that);
 	this.state = false;
+	this.power =10;
 };
 
 function Tv(that){
 	this.id = Model.prototype.createId(that);
 	this.state = false;
+	this.power =10;
 };
 
 function ElectricStove(that){
 	this.id = Model.prototype.createId(that);
 	this.state = false;
+	this.power =10;
 };
 
 Model.prototype.createId = function(that){
 	return ++that.globalId;
 };
 
-Model.prototype.changeStatus = function(id){
-	for (var i = this.data.length - 1; i >= 0; i--) {
-		if(this.data[i].id === parseInt(id)){
-			if(this.data[i].state === true){
-				this.data[i].state = false;
-				//console.log(this.data[0].id)
-				this.data[0].consumer--;
-				this.data[0].power--;
-			}else{
-				this.data[i].state = true;
-				this.data[0].consumer++;
-				this.data[0].power++;
-			};
+Model.prototype.getLastId = function(){
+	return this.data[this.data.length - 1].id;
+};
 
+Model.prototype.getDataCounter = function(){
+	return {consumer:this.data[0].consumer, power:this.data[0].power};
+};
+
+Model.prototype.changeStatusCounter = function(id){
+	var arr = this.data;
+	var length = arr.length;
+	for (var i = length - 1; i >= 0; i--) {
+		if(arr[i].id === parseInt(id)){
+			if(arr[i].state === true){
+				arr[i].state = false;
+				arr[0].consumer--;
+				arr[0].power = parseInt(arr[0].power) - parseInt(arr[i].power);
+			}else{
+				arr[i].state = true;
+				arr[0].consumer++;
+				arr[0].power = parseInt(arr[0].power) + parseInt(arr[i].power);
+			};
+			break;
 		};
 	};
 };
+
+Model.prototype.subtractionCouner = function(id){
+	var arr = this.data;
+	var length = arr.length;
+	for (var i = length - 1; i >= 0; i--) {
+		if(arr[i].id === parseInt(id) && parseInt(arr[0].consumer) !== 0){
+			arr[0].consumer--;
+			arr[0].power = parseInt(arr[0].power) - parseInt(arr[i].power);
+		}
+	}
+}
+
+////////////////////////////////////////////
+Model.prototype.dataRead = function(){
+	this.data.forEach(el =>{
+		console.log(el);
+		// console.log(el.id);
+		// if(el.state){
+		// 	console.log("el.state = ", el.state);
+		// }
+	})
+}

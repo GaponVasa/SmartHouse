@@ -11,18 +11,33 @@
 			<h1>The smart house</h1>
 		</div>
 		<div class="container">
-			<form action="">
-				<p class="hideElement">Select the item</p>
-				<p>
-					<select name="selectItem" id="selectItem">
-						<option selected="selected">Select Item</option>
-						<option value="lamp">lamp</option>
-						<option value="tv">TV</option>
-						<option value="ElectricStove">Electric Stove</option>
-					</select>
-				</p>
-				<p><input id="buttonAdd" type="button" value="Add"></p>
-				<p><input id="buttonData" type="button" value="buttonData"></p>
+			<form action="" id="add" name="add">
+				<fieldset>
+					<legend>Add Item</legend>
+					<p class="hideElement">Select the item</p>
+					<p>
+						<select name="selectAddItem">
+							<option selected="selected">Select Item</option>
+							<option value="lamp">lamp</option>
+							<option value="tv">TV</option>
+							<option value="ElectricStove">Electric Stove</option>
+						</select>
+					</p>
+					<p><input id="buttonAdd" type="button" value="Add"></p>
+					<p><input id="buttonData" type="button" value="buttonData"></p>
+				</fieldset>
+			</form>
+			<form action="" id="remove" name="remove">
+				<fieldset>
+					<legend>Remove Item</legend>
+					<p class="hideElement">Select the Id item</p>
+					<p>
+						<select name="selectRemoveId">
+							<option selected="selected">Select Remove Id Item</option>
+						</select>
+					</p>
+					<p><input id="buttonRemove" type="button" value="Remove"></p>
+				</fieldset>
 			</form>
 		</div>
 	</div>
@@ -37,22 +52,25 @@
 		<!-- <div class="container">
 			<div class="lamp">
 				<p>Lamp <img src="image/lamp.svg" alt="lamp"></p>
-				<p>Id<span>1</span></p>
+				<p class="idItem">Id<span>1</span></p>
 				<p class="status statusOff">Status <span>OFF</span></p>
+				<p class="power">Power<span>10</span>Wt</p>
 			</div>
 		</div>
 		<div class="container">
 			<div class="tv">
 				<p>Tv <img src="image/tv.svg" alt="tv"></p>
-				<p>Id<span>2</span></p>
+				<p class="idItem">Id<span>2</span></p>
 				<p class="status statusOff">Status <span>OFF</span></p>
+				<p class="power">Power<span>10</span>Wt</p>
 			</div>
 		</div>
 		<div class="container">
 			<div class="electricStove">
 				<p>Electric Stove <img src="image/stove.svg" alt="stove"></p>
-				<p>Id<span>3</span></p>
+				<p class="idItem">Id<span>3</span></p>
 				<p class="status statusOff">Status <span>OFF</span></p>
+				<p class="power">Power<span>10</span>Wt</p>
 			</div>
 		</div> -->
 	</div>
