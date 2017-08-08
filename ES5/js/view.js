@@ -22,20 +22,21 @@ View.prototype.init = function(){
 
 View.prototype.addItem = function(){
 	var value = this.selectAddItem.value;
-	var createHtml, lastId;
+	var createHtml, lastId, power;
 	if(value === "Select Item"){
 		View.prototype.hideText.call(this, this.formAdd, "ok");
 	}else{
 		this._model.add(value);
 		View.prototype.hideText.call(this, this.formAdd);
 		lastId = this._model.getLastId();
+		power = this._model.getLastPower();
 		View.prototype.addOptionId.call(this, lastId);
 		if(value === "lamp"){
-			createHtml = View.prototype.createLamp(lastId);
+			createHtml = View.prototype.createDeviceHtml("lamp", lastId, power);
 		}else if(value === "tv"){
-			createHtml = View.prototype.createTv(lastId);
+			createHtml = View.prototype.createDeviceHtml("tv", lastId, power);
 		}else if(value === "ElectricStove"){
-			createHtml = View.prototype.createStove(lastId);
+			createHtml = View.prototype.createDeviceHtml("stove", lastId, power);
 		}else{
 			console.log("ERROR The wrong value has come in addItem function");
 		};
@@ -86,26 +87,76 @@ View.prototype.removeOptionId = function(id){
 	};
 };
 
-View.prototype.createLamp = function(id){
+View.prototype.createDeviceHtml = function(device, id, power){
+	var srcImage, textDevice, classDevice;
 	var div = document.createElement("div");
+	var div1 = document.createElement("div");
+	var p, img;
+	if(device === "lamp"){
+		srcImage = "image/lamp.svg";
+		textDevice = "Lamp";
+		classDevice = "lamp";
+	}else if(device === "tv"){
+		srcImage = "image/tv.svg";
+		textDevice = "Tv";
+		classDevice = "tv";
+	}else if(device === "stove"){
+		srcImage = "image/stove.svg";
+		textDevice = "Electric Stove";
+		classDevice = "electricStove";
+	}else{
+		console.log("ERROR The wrong value has come in createDeviceHtml function")
+	};
 	div.className += "container";
-	div.innerHTML += '<div class=\"lamp\"><p>Lamp <img src=\"image/lamp.svg\" alt=\"lamp\"></p><p class=\"idItem\">Id<span>'+id+'</span></p><p class=\"status statusOff\">Status <span>OFF</span></p><p class=\"power\">Power<span>10</span>Wt</p></div>' 
+	div1.className += classDevice;
+	for(var i = 0; i < 4; i++){
+		p = document.createElement("p");
+		switch(i){
+			case 0:
+				img = document.createElement("img");
+				img.src = srcImage;
+				p.innerHTML += textDevice;
+				p.appendChild(img);
+			break;
+			case 1:View.prototype.createPHtml(p, "idItem", "Id", id);
+			break;
+			case 2:View.prototype.createPHtml(p, "status statusOff", "Status ", "OFF");
+			break;
+			case 3:View.prototype.createPHtml(p, "power", "power", power);
+			break;
+		};
+		div1.appendChild(p);
+	};
+	div.appendChild(div1);
 	return div;
 };
 
-View.prototype.createTv = function(id){
-	var div = document.createElement("div");
-	div.className += "container";
-	div.innerHTML += '<div class=\"tv\"><p>Tv <img src=\"image/tv.svg\" alt=\"tv\"></p><p class=\"idItem\">Id<span>'+id+'</span></p><p class=\"status statusOff\">Status <span>OFF</span></p><p class=\"power\">Power<span>10</span>Wt</p></div>' 
-	return div;
-};
+View.prototype.createPHtml = function(pHtml, classText, text, spanText){
+	var span = document.createElement("span");
+	pHtml.className += classText;
+	pHtml.innerHTML += text;
+	span.innerHTML += spanText;
+	pHtml.appendChild(span);
+	return pHtml;
+}
 
-View.prototype.createStove = function(id){
-	var div = document.createElement("div");
-	div.className += "container";
-	div.innerHTML += '<div class=\"electricStove\"><p>Electric Stove <img src=\"image/stove.svg\" alt=\"stove\"></p><p class=\"idItem\">Id<span>'+id+'</span></p><p class=\"status statusOff\">Status <span>OFF</span></p><p class=\"power\">Power<span>10</span>Wt</p></div>' 
-	return div;
-};
+// View.prototype.createLamp = function(id, power){
+// 	return View.prototype.createDeviceHtml("lamp", id, power);
+// };
+
+// View.prototype.createTv = function(id, power){
+// 	var div = document.createElement("div");
+// 	div.className += "container";
+// 	div.innerHTML += '<div class=\"tv\"><p>Tv <img src=\"image/tv.svg\" alt=\"tv\"></p><p class=\"idItem\">Id<span>'+id+'</span></p><p class=\"status statusOff\">Status <span>OFF</span></p><p class=\"power\">Power<span>'+power+'</span>Wt</p></div>' 
+// 	return div;
+// };
+
+// View.prototype.createStove = function(id, power){
+// 	var div = document.createElement("div");
+// 	div.className += "container";
+// 	div.innerHTML += '<div class=\"electricStove\"><p>Electric Stove <img src=\"image/stove.svg\" alt=\"stove\"></p><p class=\"idItem\">Id<span>'+id+'</span></p><p class=\"status statusOff\">Status <span>OFF</span></p><p class=\"power\">Power<span>'+power+'</span>Wt</p></div>' 
+// 	return div;
+// };
 
 View.prototype.hideText = function(form, value){
 	var select = form.querySelector("select");
