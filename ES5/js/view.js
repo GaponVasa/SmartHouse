@@ -16,7 +16,7 @@ View.prototype.init = function(){
 	// console.log(this.formRemove);
 	this.buttonAdd.addEventListener("click", this.addItem.bind(this));
 	this.buttonRemove.addEventListener("click", this.removeItem.bind(this));
-	this.main.addEventListener("click", this.changeStatus.bind(this));
+	this.main.addEventListener("click", this.clicButton.bind(this));
 	this.buttonData .addEventListener("click", this.dataRead.bind(this));
 };
 
@@ -120,9 +120,48 @@ View.prototype.createDeviceHtml = function(device, id, power){
 			break;
 			case 1:View.prototype.createPHtml(p, "idItem", "Id", id);
 			break;
-			case 2:View.prototype.createPHtml(p, "status statusOff", "Status ", "OFF");
+			case 2:
+				if(device === "stove"){
+					View.prototype.createPHtml(p, "status statusOff", "Status Hotplate1 ", "OFF");
+					div1.appendChild(p);
+
+					p = document.createElement("p");
+					View.prototype.createPHtml(p, "status statusOff", "Status Hotplate2 ", "OFF");
+					div1.appendChild(p);
+
+					p = document.createElement("p");
+					View.prototype.createPHtml(p, "status statusOff", "Status Oven ", "OFF");
+				}else{
+					View.prototype.createPHtml(p, "status statusOff", "Status ", "OFF");
+				}
 			break;
-			case 3:View.prototype.createPHtml(p, "power", "power", power);
+			case 3:
+				var textWt = document.createTextNode("Wt");
+				if(device === "tv"){
+					p = document.createElement("p");
+					View.prototype.createPHtml(p, "chennel", "Current chennel", "0");
+					div1.appendChild(p);
+
+					p = document.createElement("p");
+					View.prototype.createPHtmlButton(p, "chennel");
+					div1.appendChild(p);
+
+					p = document.createElement("p");
+					View.prototype.createPHtml(p, "volume", "Current volume", "0");
+					div1.appendChild(p);
+
+					p = document.createElement("p");
+					View.prototype.createPHtmlButton(p, "volume");
+					div1.appendChild(p);
+
+					p = document.createElement("p");
+					View.prototype.createPHtml(p, "power", "power", power);
+					p.appendChild(textWt);
+				}else{
+					View.prototype.createPHtml(p, "power", "power", power);
+					p.appendChild(textWt);
+				}
+				
 			break;
 		};
 		div1.appendChild(p);
@@ -140,23 +179,19 @@ View.prototype.createPHtml = function(pHtml, classText, text, spanText){
 	return pHtml;
 }
 
-// View.prototype.createLamp = function(id, power){
-// 	return View.prototype.createDeviceHtml("lamp", id, power);
-// };
-
-// View.prototype.createTv = function(id, power){
-// 	var div = document.createElement("div");
-// 	div.className += "container";
-// 	div.innerHTML += '<div class=\"tv\"><p>Tv <img src=\"image/tv.svg\" alt=\"tv\"></p><p class=\"idItem\">Id<span>'+id+'</span></p><p class=\"status statusOff\">Status <span>OFF</span></p><p class=\"power\">Power<span>'+power+'</span>Wt</p></div>' 
-// 	return div;
-// };
-
-// View.prototype.createStove = function(id, power){
-// 	var div = document.createElement("div");
-// 	div.className += "container";
-// 	div.innerHTML += '<div class=\"electricStove\"><p>Electric Stove <img src=\"image/stove.svg\" alt=\"stove\"></p><p class=\"idItem\">Id<span>'+id+'</span></p><p class=\"status statusOff\">Status <span>OFF</span></p><p class=\"power\">Power<span>'+power+'</span>Wt</p></div>' 
-// 	return div;
-// };
+View.prototype.createPHtmlButton = function(pHtml, idText){
+	var input = document.createElement("input");
+	input.setAttribute("type", "button");
+	input.setAttribute("id", idText + "Minus");
+	input.value = "-";
+	pHtml.appendChild(input);
+	input = document.createElement("input");
+	input.setAttribute("type", "button");
+	input.setAttribute("id", idText + "Plus");
+	input.value = "+";
+	pHtml.appendChild(input);
+	return pHtml;
+};
 
 View.prototype.hideText = function(form, value){
 	var select = form.querySelector("select");
@@ -174,26 +209,21 @@ View.prototype.hideText = function(form, value){
 	};
 };
 
-View.prototype.changeStatus = function(event){
-	var target = event.target;
-	var parent, classListElement, idElement;
-	if(target.nodeName === "SPAN"){
-		parent = target.parentElement;
-		classListElement = parent.classList;
-		idElement = parent.previousElementSibling.firstElementChild.textContent;
-		if(classListElement[1] === "statusOff"){
-			classListElement.remove("statusOff");
-			classListElement.add("statusOn");
-			target.textContent = "ON";
-			this._model.changeStatusCounter(idElement);
-			View.prototype.changeCounter.call(this);
-		}else if(classListElement[1] === "statusOn"){
-			classListElement.remove("statusOn");
-			classListElement.add("statusOff");
-			target.textContent = "OFF";
-			this._model.changeStatusCounter(idElement);
-			View.prototype.changeCounter.call(this);
-		};
+View.prototype.changeStatus = function(target, parent, id){
+	var classElement = parent.querySelector(".status")
+	var classListElement = classElement.classList;
+	if(classListElement[1] === "statusOff"){
+		classListElement.remove("statusOff");
+		classListElement.add("statusOn");
+		target.textContent = "ON";
+		this._model.changeStatusCounter(id);
+		View.prototype.changeCounter.call(this);
+	}else if(classListElement[1] === "statusOn"){
+		classListElement.remove("statusOn");
+		classListElement.add("statusOff");
+		target.textContent = "OFF";
+		this._model.changeStatusCounter(id);
+		View.prototype.changeCounter.call(this);
 	};
 };
 
@@ -203,10 +233,56 @@ View.prototype.changeCounter = function(){
 	var dataCounterObj = this._model.getDataCounter();
 	consumerElement.firstElementChild.textContent = dataCounterObj.consumer;
 	powerElement.firstElementChild.textContent = dataCounterObj.power;
-	// console.log(dataCounterObj);
-	// console.log(consumerElement.firstElementChild.textContent);
-	// console.log(powerElement.firstElementChild.textContent);
-}
+};
+
+View.prototype.clicButton = function(event){
+	var target = event.target;
+	var parent = target.parentElement.parentElement;
+	//console.log(parent);
+	var idElement = parent.querySelector(".idItem").firstElementChild.textContent;
+	//console.log(idElement);
+	if(target.id === "chennelMinus"){
+		console.log(target.id);
+		this._model.setChennel(idElement, "-");
+		View.prototype.changeVolumeAndChennel.call(this, parent, idElement, "chennel");
+	}else if(target.id === "chennelPlus"){
+		console.log(target.id);
+		this._model.setChennel(idElement, "+");
+		View.prototype.changeVolumeAndChennel.call(this, parent, idElement, "chennel");
+	}else if(target.id === "volumeMinus"){
+		console.log(target.id)
+		this._model.setVolume(idElement, "-");
+		View.prototype.changeVolumeAndChennel.call(this, parent, idElement, "volume");
+	}else if(target.id === "volumePlus"){
+		console.log(target.id)
+		this._model.setVolume(idElement, "+");
+		View.prototype.changeVolumeAndChennel.call(this, parent, idElement, "volume");
+	}else if(target.nodeName === "SPAN"){
+		console.log(target.nodeName);
+		View.prototype.changeStatus.call(this, target, parent, idElement);
+	}else{
+		console.log("else");
+	};
+
+};
+
+View.prototype.changeVolumeAndChennel = function(parent, id, hwoChange){
+	var element, value;
+	if(hwoChange === "chennel"){
+		element = parent.querySelector(".chennel span");
+		value = this._model.getChennel(id);
+	}else if(hwoChange === "volume"){
+		element = parent.querySelector(".volume span");
+		value = this._model.getVolume(id);
+
+	}else{
+
+	}
+	element.textContent = value;
+	console.log(element);
+};
+
+
 /////////////////////////////////////////////////////////////////////
 View.prototype.dataRead = function(){
 	this._model.dataRead();

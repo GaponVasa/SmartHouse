@@ -49,18 +49,18 @@ function Tv(that){
 
 function ElectricStove(that){
 	this.id = Model.prototype.createId(that);
-	this.state = false;
+	//this.state = false;
 	this.hotplate1 = false;
 	this.powerHotplate1 = 500;
 	this.hotplate2 = false;
 	this.powerHotplate2 = 500;
-	this.hotplate3 = false;
-	this.powerHotplate3 = 500;
-	this.hotplate4 = false;
-	this.powerHotplate4 = 500;
+	// this.hotplate3 = false;
+	// this.powerHotplate3 = 500;
+	// this.hotplate4 = false;
+	// this.powerHotplate4 = 500;
 	this.oven = false;
 	this.powerOven = 1000;
-	this.power = 1000;
+	this.power = (+ this.hotplate1 * this.powerHotplate1) + (+ this.hotplate1 * this.powerHotplate2) + (+ this.oven * this.powerOven);
 
 };
 
@@ -110,6 +110,39 @@ Model.prototype.subtractionCouner = function(id){
 	}
 }
 
+Model.prototype.getChennel = function(id){
+	return this.data[this.data.length - 1].chennel;
+};
+
+Model.prototype.setChennel = function(id, sign){
+	if(sign === "+"){
+		if(this.data[this.data.length - 1].chennel < 101){
+			this.data[this.data.length - 1].chennel++;
+		}
+		
+	}else{
+		if(this.data[this.data.length - 1].chennel >= 2){
+			this.data[this.data.length - 1].chennel--;
+		}
+	};
+};
+
+Model.prototype.getVolume = function(id){
+	return this.data[this.data.length - 1].volume;
+};
+
+Model.prototype.setVolume = function(id, sign){
+	if(sign === "+"){
+		if(this.data[this.data.length - 1].volume < 101){
+			this.data[this.data.length - 1].volume++ 
+		}
+	}else{
+		if(this.data[this.data.length - 1].volume >= 1){
+			this.data[this.data.length - 1].volume--;
+		}
+	};
+	this.data[this.data.length - 1].power = 200 + (this.data[this.data.length - 1].volume/100)*20;
+};
 ////////////////////////////////////////////
 Model.prototype.dataRead = function(){
 	this.data.forEach(el =>{
