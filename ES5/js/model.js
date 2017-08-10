@@ -77,74 +77,114 @@ Model.prototype.getLastPower = function(){
 };
 
 Model.prototype.getDataCounter = function(){
+	//console.log(this.data[0].power);
 	return {consumer:this.data[0].consumer, power:this.data[0].power};
 };
 
 Model.prototype.changeStatusCounter = function(id){
 	var arr = this.data;
-	var length = arr.length;
-	for (var i = length - 1; i >= 0; i--) {
-		if(arr[i].id === parseInt(id)){
-			if(arr[i].state === true){
-				arr[i].state = false;
-				arr[0].consumer--;
-				arr[0].power = parseInt(arr[0].power) - parseInt(arr[i].power);
-			}else{
-				arr[i].state = true;
-				arr[0].consumer++;
-				arr[0].power = parseInt(arr[0].power) + parseInt(arr[i].power);
-			};
-			break;
-		};
+	var i = this.findNumberArray(id);
+	if(arr[i].state === true){
+		arr[i].state = false;
+		arr[0].consumer--;
+		arr[0].power = parseFloat(arr[0].power) - parseFloat(arr[i].power);
+	}else{
+		arr[i].state = true;
+		arr[0].consumer++;
+		arr[0].power = parseFloat(arr[0].power) + parseFloat(arr[i].power);
 	};
 };
 
 Model.prototype.subtractionCouner = function(id){
 	var arr = this.data;
 	var length = arr.length;
-	for (var i = length - 1; i >= 0; i--) {
-		if(arr[i].id === parseInt(id) && parseInt(arr[0].consumer) !== 0){
-			arr[0].consumer--;
-			arr[0].power = parseInt(arr[0].power) - parseInt(arr[i].power);
-		}
-	}
-}
-
-Model.prototype.getChennel = function(id){
-	return this.data[this.data.length - 1].chennel;
+	var i = this.findNumberArray(id);
+	if(arr[i].id === parseInt(id) && parseInt(arr[0].consumer) !== 0){
+		arr[0].consumer--;
+		arr[0].power = parseFloat(arr[0].power) - parseFloat(arr[i].power);
+	};
 };
 
-Model.prototype.setChennel = function(id, sign){
+Model.prototype.addPowerInCouner = function(addPower){
+	//console.log("this.data[0].power", this.data[0].power);
+	//console.log("addPower", addPower);
+	this.data[0].power = this.data[0].power + addPower;
+	//console.log("this.data[0].power + parseFloat(addPower)",this.data[0].power);
+};
+
+Model.prototype.removePowerInCouner = function(removePower){
+	//console.log("this.data[0].power", this.data[0].power);
+	//console.log("removePower", removePower);
+	this.data[0].power = this.data[0].power - parseFloat(removePower);
+	//console.log("this.data[0].power after", this.data[0].power);
+};
+
+Model.prototype.findNumberArray = function(numberElementArray){
+	var arr = this.data;
+	var length = arr.length;
+	for (var i = 0; i <= length - 1; i++) {
+		if(arr[i].id === parseInt(numberElementArray)){
+			//console.log(i);
+			return i;
+		}
+	}
+	console.log("Don't find id");
+};
+
+Model.prototype.getChennel = function(numberElementArray){
+	return this.data[numberElementArray].chennel;
+};
+
+Model.prototype.setChennel = function(numberElementArray, sign){
 	if(sign === "+"){
-		if(this.data[this.data.length - 1].chennel < 101){
-			this.data[this.data.length - 1].chennel++;
+		if(this.data[numberElementArray].chennel < 101){
+			this.data[numberElementArray].chennel++;
 		}
 		
 	}else{
-		if(this.data[this.data.length - 1].chennel >= 2){
-			this.data[this.data.length - 1].chennel--;
+		if(this.data[numberElementArray].chennel >= 2){
+			this.data[numberElementArray].chennel--;
 		}
 	};
 };
 
-Model.prototype.getVolume = function(id){
-	return this.data[this.data.length - 1].volume;
+Model.prototype.getVolume = function(numberElementArray){
+	return this.data[numberElementArray].volume;
 };
 
-Model.prototype.setVolume = function(id, sign){
+Model.prototype.setVolume = function(numberElementArray, sign){
 	if(sign === "+"){
-		if(this.data[this.data.length - 1].volume < 101){
-			this.data[this.data.length - 1].volume++ 
+		if(this.data[numberElementArray].volume < 101){
+			this.data[numberElementArray].volume++ 
 		}
 	}else{
-		if(this.data[this.data.length - 1].volume >= 1){
-			this.data[this.data.length - 1].volume--;
+		if(this.data[numberElementArray].volume >= 1){
+			this.data[numberElementArray].volume--;
 		}
 	};
-	this.data[this.data.length - 1].power = 200 + (this.data[this.data.length - 1].volume/100)*20;
 };
+
+Model.prototype.getStatus = function(numberElementArray){
+	// console.log(id);
+	// console.log(this.data[id]);
+	return this.data[numberElementArray].state;
+};
+
+Model.prototype.recalculationPowerTv = function(numberElementArray){
+	var newPower = 200 + (parseInt(this.data[numberElementArray].volume)/100)*20;
+	var oldPower = this.data[numberElementArray].power;
+	//console.log(200 + (this.data[numberElementArray].volume/100)*20);
+	//console.log("oldPower",oldPower);
+	this.removePowerInCouner(oldPower);
+	this.addPowerInCouner(newPower);
+	this.data[numberElementArray].power = newPower;
+	//console.log("this.getDataCounter().power",this.getDataCounter().power)
+	//console.log(this.data[numberElementArray].power);
+};
+
 ////////////////////////////////////////////
 Model.prototype.dataRead = function(){
+	console.log(this.data);
 	this.data.forEach(el =>{
 		console.log(el);
 	})

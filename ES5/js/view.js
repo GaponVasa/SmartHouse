@@ -139,7 +139,7 @@ View.prototype.createDeviceHtml = function(device, id, power){
 				var textWt = document.createTextNode("Wt");
 				if(device === "tv"){
 					p = document.createElement("p");
-					View.prototype.createPHtml(p, "chennel", "Current chennel", "0");
+					View.prototype.createPHtml(p, "chennel", "Current chennel", "1");
 					div1.appendChild(p);
 
 					p = document.createElement("p");
@@ -147,7 +147,7 @@ View.prototype.createDeviceHtml = function(device, id, power){
 					div1.appendChild(p);
 
 					p = document.createElement("p");
-					View.prototype.createPHtml(p, "volume", "Current volume", "0");
+					View.prototype.createPHtml(p, "volume", "Current volume", "50");
 					div1.appendChild(p);
 
 					p = document.createElement("p");
@@ -209,22 +209,26 @@ View.prototype.hideText = function(form, value){
 	};
 };
 
-View.prototype.changeStatus = function(target, parent, id){
-	var classElement = parent.querySelector(".status")
+View.prototype.changeStatus = function(parent, target, id){
+	// console.log("target",target);
+	// console.log("id", id)
+	var classElement = target.parentElement;
 	var classListElement = classElement.classList;
 	if(classListElement[1] === "statusOff"){
-		classListElement.remove("statusOff");
-		classListElement.add("statusOn");
-		target.textContent = "ON";
-		this._model.changeStatusCounter(id);
-		View.prototype.changeCounter.call(this);
+		View.prototype.changeStatusElement.call(this, target, classListElement, id, "statusOff", "statusOn", "ON");
 	}else if(classListElement[1] === "statusOn"){
-		classListElement.remove("statusOn");
-		classListElement.add("statusOff");
-		target.textContent = "OFF";
-		this._model.changeStatusCounter(id);
-		View.prototype.changeCounter.call(this);
+		View.prototype.changeStatusElement.call(this, target, classListElement, id, "statusOn", "statusOff", "OFF");
 	};
+};
+
+View.prototype.changeStatusElement = function(target, classListElement, id, removeClass, addClass, textInSpan){
+	// console.log("classListElement", classListElement);
+	// console.log("target",target);
+	classListElement.remove(removeClass);
+	classListElement.add(addClass);
+	target.textContent = textInSpan;
+	this._model.changeStatusCounter(id);
+	View.prototype.changeCounter.call(this);
 };
 
 View.prototype.changeCounter = function(){
@@ -233,33 +237,38 @@ View.prototype.changeCounter = function(){
 	var dataCounterObj = this._model.getDataCounter();
 	consumerElement.firstElementChild.textContent = dataCounterObj.consumer;
 	powerElement.firstElementChild.textContent = dataCounterObj.power;
+	//console.log(dataCounterObj.power);
 };
 
 View.prototype.clicButton = function(event){
 	var target = event.target;
 	var parent = target.parentElement.parentElement;
-	//console.log(parent);
+	// console.log(target);
+	// console.log(target.id);
 	var idElement = parent.querySelector(".idItem").firstElementChild.textContent;
 	//console.log(idElement);
-	if(target.id === "chennelMinus"){
-		console.log(target.id);
-		this._model.setChennel(idElement, "-");
-		View.prototype.changeVolumeAndChennel.call(this, parent, idElement, "chennel");
-	}else if(target.id === "chennelPlus"){
-		console.log(target.id);
-		this._model.setChennel(idElement, "+");
-		View.prototype.changeVolumeAndChennel.call(this, parent, idElement, "chennel");
-	}else if(target.id === "volumeMinus"){
-		console.log(target.id)
-		this._model.setVolume(idElement, "-");
-		View.prototype.changeVolumeAndChennel.call(this, parent, idElement, "volume");
-	}else if(target.id === "volumePlus"){
-		console.log(target.id)
-		this._model.setVolume(idElement, "+");
-		View.prototype.changeVolumeAndChennel.call(this, parent, idElement, "volume");
+	var numberInArr = this._model.findNumberArray(idElement);
+	//console.log(numberInArr);
+	var status = this._model.getStatus(numberInArr);//змінна для відслідковування вкл./викл. ТВ
+	//console.log(status);
+	if(target.id === "chennelMinus" && status === true){
+		this._model.setChennel(numberInArr, "-");
+		View.prototype.changeVolumeAndChennel.call(this, parent, numberInArr, "chennel");
+	}else if(target.id === "chennelPlus" && status === true){
+		this._model.setChennel(numberInArr, "+");
+		View.prototype.changeVolumeAndChennel.call(this, parent, numberInArr, "chennel");
+	}else if(target.id === "volumeMinus" && status === true){
+		this._model.setVolume(numberInArr, "-");
+		View.prototype.changeVolumeAndChennel.call(this, parent, numberInArr, "volume");
+		this._model.recalculationPowerTv(numberInArr);
+		View.prototype.changeCounter.call(this);
+	}else if(target.id === "volumePlus" && status === true){
+		this._model.setVolume(numberInArr, "+");
+		View.prototype.changeVolumeAndChennel.call(this, parent, numberInArr, "volume");
+		this._model.recalculationPowerTv(numberInArr);
+		View.prototype.changeCounter.call(this);
 	}else if(target.nodeName === "SPAN"){
-		console.log(target.nodeName);
-		View.prototype.changeStatus.call(this, target, parent, idElement);
+		View.prototype.changeStatus.call(this, parent, target, idElement);
 	}else{
 		console.log("else");
 	};
@@ -279,7 +288,7 @@ View.prototype.changeVolumeAndChennel = function(parent, id, hwoChange){
 
 	}
 	element.textContent = value;
-	console.log(element);
+	//console.log(element);
 };
 
 
