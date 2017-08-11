@@ -210,26 +210,43 @@ View.prototype.hideText = function(form, value){
 };
 
 View.prototype.changeStatus = function(parent, target, id){
-	// console.log("target",target);
+	//console.log("parent",parent);
 	// console.log("id", id)
 	var classElement = target.parentElement;
 	var classListElement = classElement.classList;
 	if(classListElement[1] === "statusOff"){
-		View.prototype.changeStatusElement.call(this, target, classListElement, id, "statusOff", "statusOn", "ON");
+		View.prototype.changeStatusElement.call(this, parent, target, classListElement, id, "statusOff", "statusOn", "ON");
 	}else if(classListElement[1] === "statusOn"){
-		View.prototype.changeStatusElement.call(this, target, classListElement, id, "statusOn", "statusOff", "OFF");
+		View.prototype.changeStatusElement.call(this, parent, target, classListElement, id, "statusOn", "statusOff", "OFF");
 	};
 };
 
-View.prototype.changeStatusElement = function(target, classListElement, id, removeClass, addClass, textInSpan){
+View.prototype.changeStatusElement = function(parent, target, classListElement, id, removeClass, addClass, textInSpan){
 	// console.log("classListElement", classListElement);
 	// console.log("target",target);
+	var nameStoveElement = View.prototype.nameStoveElement.call(this, target);
+	//console.log("nameStoveElement",nameStoveElement);
 	classListElement.remove(removeClass);
 	classListElement.add(addClass);
 	target.textContent = textInSpan;
-	this._model.changeStatusCounter(id);
+	//console.log("parent.classList",parent.classList[0]);
+	if(parent.classList[0] === "electricStove"){
+		this._model.changePowerInCounter(id, nameStoveElement);
+	}else{
+		this._model.changeStatusCounter(id);
+	}
 	View.prototype.changeCounter.call(this);
 };
+
+View.prototype.nameStoveElement = function(target){
+	var allText = target.previousSibling;
+	//console.dir(allText.data.split(" "));
+	var arr = allText.data.split(" ");
+	var arrString = arr[1].split("");
+	arrString[0] = arrString[0].toLowerCase();
+	var targetText = arrString.join("");
+	return targetText;
+}
 
 View.prototype.changeCounter = function(){
 	var consumerElement = this.counter.querySelector(".consumer");
@@ -283,7 +300,6 @@ View.prototype.changeVolumeAndChennel = function(parent, id, hwoChange){
 	}else if(hwoChange === "volume"){
 		element = parent.querySelector(".volume span");
 		value = this._model.getVolume(id);
-
 	}else{
 
 	}

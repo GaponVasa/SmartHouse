@@ -95,6 +95,46 @@ Model.prototype.changeStatusCounter = function(id){
 	};
 };
 
+Model.prototype.changePowerInCounter = function(id, nameStoveElement){
+	var powerHotplate1, powerHotplate2, powerOven, powerStowe;
+	var numberInArr = this.findNumberArray(id);
+	var counter = this.data[0];
+	var element = this.data[numberInArr];
+	if(element[nameStoveElement] === true){
+		element[nameStoveElement] = false;
+		//Model.prototype.changeCounerConsumer(id);
+		counter.power = parseFloat(counter.power) - parseFloat(element.power);
+	}else{
+		element[nameStoveElement] = true;
+		counter.power = parseFloat(counter.power) + parseFloat(element.power);
+	};
+	powerHotplate1 = +element.hotplate1 * element.powerHotplate1;
+	powerHotplate2 = +element.hotplate2 * element.powerHotplate2;
+	powerOven = +element.oven * element.powerOven;
+	powerStowe = powerHotplate1 + powerHotplate2 + powerOven;
+
+	console.log("powerStowe",powerStowe);
+	console.log("numberInArr",numberInArr);
+	console.log("nameStoveElement",nameStoveElement);
+	// if(element.state === true){
+	// 	element.state = false;
+	// 	counter.consumer--;
+	// 	counter.power = parseFloat(counter.power) - parseFloat(element.power);
+	// }else{
+	// 	element.state = true;
+	// 	counter.consumer++;
+	// 	counter.power = parseFloat(counter.power) + parseFloat(element.power);
+	// };
+};
+
+Model.prototype.changeCounerConsumer = function(id){
+	var numberInArr = this.findNumberArray(id);
+	var arr = Object.keys(this.data[0]);
+	console.log(arr)
+	var lengthArr = arr.length;
+	// for()
+}
+
 Model.prototype.subtractionCouner = function(id){
 	var arr = this.data;
 	var length = arr.length;
