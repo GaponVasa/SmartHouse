@@ -36,16 +36,24 @@ Model.prototype.add = function(value){
 function Lamp(that){
 	this.id = Model.prototype.createId(that);
 	this.state = false;
-	this.power =10;
+	this.power = 0;
 };
+
+Lamp.prototype.getPower = function(){
+	return +this.state * 10;
+}
 
 function Tv(that){
 	this.id = Model.prototype.createId(that);
 	this.state = false;
 	this.chennel = 1;
 	this.volume = 50;
-	this.power = 200 + (this.volume/100)*20;
+	this.power = 0;
 };
+
+Tv.prototype.getPower = function(){
+	return +this.state * (200 + (this.volume/100)*20);
+}
 
 function ElectricStove(that){
 	this.id = Model.prototype.createId(that);
@@ -59,9 +67,12 @@ function ElectricStove(that){
 	this.powerHotplate4 = 500;
 	this.oven = false;
 	this.powerOven = 1000;
-	this.power = (+ this.hotplate1 * this.powerHotplate1) + (+ this.hotplate1 * this.powerHotplate2) + (+ this.oven * this.powerOven);
-
+	this.power = 0;
 };
+
+ElectricStove.prototype.getPower = function(){
+	return (+ this.hotplate1 * this.powerHotplate1) + (+ this.hotplate2 * this.powerHotplate2) + (+ this.hotplate3 * this.powerHotplate3) + (+ this.hotplate4 * this.powerHotplate4) + (+ this.oven * this.powerOven);
+}
 
 Model.prototype.createId = function(that){
 	return ++that.globalId;
@@ -75,6 +86,16 @@ Model.prototype.getLastPower = function(){
 	return this.data[this.data.length - 1].power;
 };
 
+Model.prototype.getPower = function(id){
+	var numberInArr = this.findNumberArray(id);
+	return this.data[numberInArr].power;
+};
+
+Model.prototype.setPower = function(id){
+	this.data[id].power = this.data[id].getPower(id);
+	return this.data[id].power;
+};
+
 Model.prototype.getDataCounter = function(){
 	return {consumer:this.data[0].consumer, power:this.data[0].power};
 };
@@ -82,14 +103,17 @@ Model.prototype.getDataCounter = function(){
 Model.prototype.changeStatusCounter = function(id){
 	var arr = this.data;
 	var i = this.findNumberArray(id);
+	var power;
 	if(arr[i].state === true){
+		power = this.setPower(i);
 		arr[i].state = false;
 		arr[0].consumer--;
-		arr[0].power = (parseFloat(arr[0].power) - arr[i].power).toFixed(1);
+		arr[0].power = (parseFloat(arr[0].power) - power).toFixed(1);
 	}else{
 		arr[i].state = true;
+		power = this.setPower(i);
 		arr[0].consumer++;
-		arr[0].power = (parseFloat(arr[0].power) + arr[i].power).toFixed(1);
+		arr[0].power = (parseFloat(arr[0].power) + power).toFixed(1);
 	};
 };
 
@@ -119,19 +143,21 @@ Model.prototype.changeCounerConsumer = function(element, key, counter){
 	var lenghtArr = arr.length;
 	var countTrue = 0;
 	var countFalse = 0;
+	var boolElement = 0;
 	for(var i = 0; i <= lenghtArr - 1; i++){
 		if(element[arr[i]] === true){
 			countTrue++;
+			boolElement++;
 		}else if(element[arr[i]] === false){
 			countFalse++;
+			boolElement++;
 		};
 	};
 	if(countTrue === 1 && key === true){
 		counter.consumer++;
-	}else if(countFalse === 3 && key === false){
+	}else if(countFalse === boolElement && key === false){
 		counter.consumer--
 	};
-	
 };
 
 Model.prototype.subtractionCouner = function(id){
@@ -188,8 +214,6 @@ Model.prototype.setVolume = function(numberElementArray, sign){
 };
 
 Model.prototype.getStatus = function(numberElementArray){
-	// console.log(id);
-	// console.log(this.data[id]);
 	return this.data[numberElementArray].state;
 };
 
@@ -199,17 +223,4 @@ Model.prototype.recalculationPowerTv = function(numberElementArray){
 	this.data[0].power = (parseFloat(this.data[0].power) - oldPower).toFixed(1);
 	this.data[0].power = (parseFloat(this.data[0].power) + newPower).toFixed(1);
 	this.data[numberElementArray].power = newPower;
-
 };
-
-Model.prototype.math = function(firstDigit, secondDigit, sign){
-
-}
-
-////////////////////////////////////////////
-Model.prototype.dataRead = function(){
-	console.log(this.data);
-	this.data.forEach(el =>{
-		console.log(el);
-	})
-}
