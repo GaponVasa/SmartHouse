@@ -168,6 +168,10 @@ View.prototype.createDeviceHtml = function(device, id, power){
 	};
 	div.appendChild(div1);
 	return div;
+
+	// function addPHtml(){
+		
+	// }
 };
 
 View.prototype.createPHtml = function(pHtml, classText, text, spanText){
@@ -222,15 +226,12 @@ View.prototype.changeStatus = function(parent, target, id){
 };
 
 View.prototype.changeStatusElement = function(parent, target, classListElement, id, removeClass, addClass, textInSpan){
-	// console.log("classListElement", classListElement);
-	// console.log("target",target);
-	var nameStoveElement = View.prototype.nameStoveElement.call(this, target);
-	//console.log("nameStoveElement",nameStoveElement);
+	var nameStoveElement;
 	classListElement.remove(removeClass);
 	classListElement.add(addClass);
 	target.textContent = textInSpan;
-	//console.log("parent.classList",parent.classList[0]);
 	if(parent.classList[0] === "electricStove"){
+		nameStoveElement = View.prototype.nameStoveElement.call(this, target);
 		this._model.changePowerInCounter(id, nameStoveElement);
 	}else{
 		this._model.changeStatusCounter(id);
@@ -240,12 +241,12 @@ View.prototype.changeStatusElement = function(parent, target, classListElement, 
 
 View.prototype.nameStoveElement = function(target){
 	var allText = target.previousSibling;
-	//console.dir(allText.data.split(" "));
+	var powerText = "power" + allText.data.split(" ")[1]
 	var arr = allText.data.split(" ");
 	var arrString = arr[1].split("");
 	arrString[0] = arrString[0].toLowerCase();
 	var targetText = arrString.join("");
-	return targetText;
+	return [targetText, powerText];
 }
 
 View.prototype.changeCounter = function(){
@@ -254,20 +255,14 @@ View.prototype.changeCounter = function(){
 	var dataCounterObj = this._model.getDataCounter();
 	consumerElement.firstElementChild.textContent = dataCounterObj.consumer;
 	powerElement.firstElementChild.textContent = dataCounterObj.power;
-	//console.log(dataCounterObj.power);
 };
 
 View.prototype.clicButton = function(event){
 	var target = event.target;
 	var parent = target.parentElement.parentElement;
-	// console.log(target);
-	// console.log(target.id);
 	var idElement = parent.querySelector(".idItem").firstElementChild.textContent;
-	//console.log(idElement);
 	var numberInArr = this._model.findNumberArray(idElement);
-	//console.log(numberInArr);
 	var status = this._model.getStatus(numberInArr);//змінна для відслідковування вкл./викл. ТВ
-	//console.log(status);
 	if(target.id === "chennelMinus" && status === true){
 		this._model.setChennel(numberInArr, "-");
 		View.prototype.changeVolumeAndChennel.call(this, parent, numberInArr, "chennel");
