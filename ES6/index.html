@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Smart House</title>
+	<link rel="stylesheet" type="text/css" href="css/all.css">
+</head>
+<body>
+	<div class="header">
+		<div class="container">
+			<h1>The smart house</h1>
+		</div>
+		<div class="container">
+			<form action="" id="add" name="add">
+				<fieldset>
+					<legend>Add Device</legend>
+					<p class="hideElement">Select the item</p>
+					<p>
+						<select name="selectAddItem">
+							<option selected="selected">Select Item</option>
+							<option value="lamp">lamp</option>
+							<option value="tv">TV</option>
+							<option value="ElectricStove">Electric Stove</option>
+						</select>
+					</p>
+					<p><input id="buttonAdd" type="button" value="Add"></p>
+				</fieldset>
+			</form>
+			<form action="" id="remove" name="remove">
+				<fieldset>
+					<legend>Remove Device</legend>
+					<p class="hideElement">Select the Id item</p>
+					<p>
+						<select name="selectRemoveId">
+							<option selected="selected">Select Remove Id Item</option>
+						</select>
+					</p>
+					<p><input id="buttonRemove" type="button" value="Remove"></p>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+	<div class="main">
+		<div class="container">
+			<div id="counter">
+				<p>Counter of energy</p>
+				<p class="consumer"><span>0</span> consumer(s) of energy</p>
+				<p class="power"><span>0</span>Wt</p>
+			</div>
+		</div>
+		<!-- <div class="container">
+			<div class="lamp">
+				<p>Lamp <img src="image/lamp.svg" alt="lamp"></p>
+				<p class="idItem">Id<span>1</span></p>
+				<p class="status statusOff">Status <span>OFF</span></p>
+				<p class="power">Power<span>10</span>Wt</p>
+			</div>
+		</div> -->
+		<!-- <div class="container">
+			<div class="tv">
+				<p>Tv <img src="image/tv.svg" alt="tv"></p>
+				<p class="idItem">Id<span>2</span></p>
+				<p class="status statusOff">Status <span>OFF</span></p>
+				<p class="chennel">
+					Current chennel <span>0</span>
+				</p>
+				<p>
+					<input id="chennelMinus" type="button" value="-"">
+					<input id="chennelPlus" type="button" value="+">
+				</p>
+				<p class="volume">
+					Current volume <span>0</span>
+				</p>
+				<p>
+					<input id="volumejMinus" type="button" value="-">
+					<input id="volumejPlus" type="button" value="+">
+				</p>
+				<p class="power">Power<span>10</span>Wt</p>
+			</div>
+		</div>
+		<div class="container">
+			<div class="electricStove">
+				<p>Electric Stove <img src="image/stove.svg" alt="stove"></p>
+				<p class="idItem">Id<span>3</span></p>
+				<p class="status statusOff">Status Hotplate1<span>OFF</span></p>
+				<p class="status statusOff">Status Hotplate2<span>OFF</span></p>
+				<p class="status statusOff">Status Oven<span>OFF</span></p>
+				<p class="power">Power<span>10</span>Wt</p>
+			</div>
+		</div> -->
+	</div>
+	<script src="js/view.js" type="text/javascript"></script>
+	<script src="js/model.js" type="text/javascript"></script>
+	<script src="js/constructor.js" type="text/javascript"></script>
+	<!-- <script src="js/.js" type="text/javascript"></script> -->
+</body>
+</html>
