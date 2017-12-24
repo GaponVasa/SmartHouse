@@ -14,9 +14,13 @@ Model.prototype.remove = function(value){
 	var arr = this.data;
 	var length = arr.length;
 	for (var i = length - 1; i >= 0; i--) {
-		if(parseInt(arr[i].id) === parseInt(value)){
-			arr.splice(i, 1);
-			break;
+		if(arr[i] === undefined){
+			continue;
+		}else{
+			if(parseInt(arr[i].id) === parseInt(value)){
+				delete arr[i];
+				break;
+			};
 		};
 	};
 };
@@ -174,10 +178,14 @@ Model.prototype.findNumberArray = function(numberElementArray){
 	var arr = this.data;
 	var length = arr.length;
 	for (var i = 0; i <= length - 1; i++) {
-		if(arr[i].id === parseInt(numberElementArray)){
-			return i;
-		}
-	}
+		if(arr[i] === undefined){
+			continue;
+		}else{
+			if(arr[i].id === parseInt(numberElementArray)){
+				return i;
+			};
+		};
+	};
 	console.log("Don't find id");
 };
 

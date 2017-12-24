@@ -12,9 +12,9 @@ function View(model){
 };
 
 View.prototype.init = function(){
-	this.buttonAdd.addEventListener("click", this.addItem.bind(this));
-	this.buttonRemove.addEventListener("click", this.removeItem.bind(this));
-	this.main.addEventListener("click", this.clicButton.bind(this));
+	this.buttonAdd.addEventListener("click", this.addItem.bind(this), true);
+	this.buttonRemove.addEventListener("click", this.removeItem.bind(this), true);
+	this.main.addEventListener("click", this.clicButton.bind(this), true);
 };
 
 View.prototype.addItem = function(){
@@ -184,7 +184,7 @@ View.prototype.hideText = function(form, value){
 	if(value === "ok"){
 		if(red === null){
 			select.className += "red";
-		};		
+		};
 		hide.style.display = "block";	
 	}else{
 		select.classList.remove("red");
@@ -199,24 +199,29 @@ View.prototype.clicButton = function(event){
 	var numberInArr = this._model.findNumberArray(idElement);
 	var status = this._model.getStatus(numberInArr);//змінна для відслідковування вкл./викл. ТВ
 	if(target.id === "chennelMinus" && status === true){
+		//console.log('View clicButton(event) target.id === "chennelMinus" && status === true');
 		this._model.setChennel(numberInArr, "-");
 		this.changeVolumeAndChennel(parent, numberInArr, "chennel");
 	}else if(target.id === "chennelPlus" && status === true){
+		//console.log('View clicButton(event) target.id === "chennelPlus" && status === true');
 		this._model.setChennel(numberInArr, "+");
 		this.changeVolumeAndChennel(parent, numberInArr, "chennel");
 	}else if(target.id === "volumeMinus" && status === true){
+		//console.log('View clicButton(event) target.id === "volumeMinus" && status === true');
 		this._model.setVolume(numberInArr, "-");
 		this.changeVolumeAndChennel(parent, numberInArr, "volume");
 		this._model.recalculationPowerTv(numberInArr);
 		this.changePowerDevice(parent, numberInArr);
 		this.changeCounter();
 	}else if(target.id === "volumePlus" && status === true){
+		//console.log('View clicButton(event) target.id === "volumePlus" && status === true');
 		this._model.setVolume(numberInArr, "+");
 		this.changeVolumeAndChennel(parent, numberInArr, "volume");
 		this._model.recalculationPowerTv(numberInArr);
 		this.changePowerDevice(parent, numberInArr);
 		this.changeCounter();
 	}else if(target.nodeName === "SPAN"){
+		//console.log('View clicButton(event) target.nodeName === "SPAN"');
 		this.changeStatus(parent, target, idElement);
 	};
 };
@@ -262,6 +267,7 @@ View.prototype.changeStatusElement = function(parent, target, classListElement, 
 
 View.prototype.changePowerDevice = function(parent, id){
 	var span  = parent.querySelector(".power span");
+	//console.log('View changePowerDevice(parent, id) id', id);
 	this._model.setPower(id);
 	var text = this._model.getPower(id);
 	span.textContent = text;
